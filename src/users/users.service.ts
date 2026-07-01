@@ -45,10 +45,19 @@ export class UsersService {
 		return newUser;
 	}
 
-	update(id: string, updateUserDto: UpdateUserDto) {
-		return {
-			data: { id, ...updateUserDto },
-			message: "User updated successfully",
-		};
+	update(id: number, updateUserDto: UpdateUserDto) {
+		const userIndex = this.users.findIndex((user) => user.id === id);
+		if (userIndex === -1) throw new NotFoundException("User not found");
+
+		this.users[userIndex] = { ...this.users[userIndex], ...updateUserDto };
+		return this.users[userIndex];
+	}
+
+	delete(id: number) {
+		const userIndex = this.users.findIndex((user) => user.id === id);
+		if (userIndex === -1) throw new NotFoundException("User not found");
+
+		this.users.splice(userIndex, 1);
+		return { message: "User deleted successfully" };
 	}
 }
