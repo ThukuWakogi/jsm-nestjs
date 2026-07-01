@@ -37,7 +37,12 @@ export class UsersService {
 	}
 
 	create(createUserDto: CreateUserDto) {
-		return { data: createUserDto, message: "User created successfully" };
+		this.logger.log("Creating user");
+
+		const newUser: User = { id: this.users.length + 1, ...createUserDto };
+		this.users.push(newUser);
+
+		return newUser;
 	}
 
 	update(id: string, updateUserDto: UpdateUserDto) {
